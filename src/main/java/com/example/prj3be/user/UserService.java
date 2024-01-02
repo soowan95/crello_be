@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Transactional(rollbackFor = Exception.class)
 public class UserService {
 
-	private final UserRepository memberRepository;
+	private final UserRepository userRepository;
 
 	public void registMember(RegistUserRequest request) {
 
-		memberRepository.save(User.builder()
+		userRepository.save(User.builder()
 			.id(request.getId())
 			.name(request.getName())
 			.password(request.getPassword())
@@ -30,8 +30,9 @@ public class UserService {
 
 	public LoginResponse login(LoginUserRequest request) {
 
-		User user = memberRepository.findByIdAndPassword(request.getId(), request.getPassword()).orElseThrow(() -> new CustomException(
-			CustomEnum.UNAUTHORIZED));
+		User user = userRepository.findByIdAndPassword(request.getId(), request.getPassword())
+			.orElseThrow(() -> new CustomException(
+				CustomEnum.UNAUTHORIZED));
 
 		return LoginResponse.builder()
 			.id(user.getId())

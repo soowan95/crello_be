@@ -14,21 +14,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/member/")
+@RequestMapping("/api/v1/user/")
 @Tag(name = "User", description = "User API Document")
 @RequiredArgsConstructor
 public class UserController {
 
-	private final UserService memberService;
+	private final UserService userService;
 
 	@PostMapping("regist")
 	public ResponseEntity<Void> registMember(@RequestBody RegistUserRequest request) {
-		memberService.registMember(request);
+		userService.registMember(request);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginUserRequest request) {
-		return ResponseEntity.ok(memberService.login(request));
+		return ResponseEntity.ok(userService.login(request));
 	}
 }
