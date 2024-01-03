@@ -17,6 +17,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import com.example.prj3be.dto.response.TokenInfo;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -56,7 +58,7 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	// Autentication 객체의 권한 정보를 이용해서 토큰을 생성
-	public String createToken(Authentication authentication) {
+	public TokenInfo createToken(Authentication authentication) {
 
 		System.out.println("createToken");
 
@@ -69,12 +71,23 @@ public class TokenProvider implements InitializingBean {
 		long now = (new Date()).getTime();
 		Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
-		return Jwts.builder()
+		String accessToken = Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim(AUTHORITIES_KEY, authorities)
 			.signWith(key, SignatureAlgorithm.HS512)
 			.setExpiration(validity)
 			.compact();
+
+		String refreshToken = Jwts.builder()
+			.setExpiration(new Date(now + 86400000))
+			.signWith(key, SignatureAlgorithm.HS512)
+			.compact();
+
+		return TokenInfo.builder()
+			.grantType("Bearer")
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
 	// 토큰에 담겨있는 정보를 이용해 Authentication 객체 리턴

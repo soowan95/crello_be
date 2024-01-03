@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private static final String[] PERMIT_URL_ARRAY = {
-		"/v3/api-docs/**",
+		"/api-docs/**",
 		"/swagger-ui/**",
 		"/prj3-ui.html",
 		"/",
@@ -45,11 +45,8 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring()
-			.requestMatchers("/error",
-				"/swagger-ui/**",
-				"/swagger-resources/**",
-				"/v3/api-docs/**",
-				"/prj3-ui.html");
+			.requestMatchers("/resources/**",
+				"/api/v1/user/regist");
 	}
 
 	@Bean
