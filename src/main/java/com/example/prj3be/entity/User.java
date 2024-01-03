@@ -1,9 +1,13 @@
-package com.example.prj3be.user;
+package com.example.prj3be.entity;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.prj3be.user.UserRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +30,8 @@ public class User {
 	private String password;
 	@Column(name = "email")
 	private String email;
+	@Enumerated(EnumType.STRING)
+	private UserRole userRole;
 
 	public User hashPassword(PasswordEncoder passwordEncoder) {
 		this.password = passwordEncoder.encode(this.password);
