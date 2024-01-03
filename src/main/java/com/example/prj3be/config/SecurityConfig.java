@@ -24,6 +24,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private static final String[] PERMIT_URL_ARRAY = {
+		"/v3/api-docs/**",
+		"/swagger-ui/**",
+		"/prj3-ui.html",
+		"/",
+		"/login"
+	};
+
 	private final TokenProvider tokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -37,7 +45,11 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring()
-			.requestMatchers("/resources/**");
+			.requestMatchers("/error",
+				"/swagger-ui/**",
+				"/swagger-resources/**",
+				"/v3/api-docs/**",
+				"/prj3-ui.html");
 	}
 
 	@Bean
@@ -53,7 +65,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeHttpRequests()
-			.requestMatchers("/login").permitAll()
+			.requestMatchers(PERMIT_URL_ARRAY).permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.apply(new JwtSecurityConfig(tokenProvider));
