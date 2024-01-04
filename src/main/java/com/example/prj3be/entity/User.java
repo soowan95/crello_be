@@ -22,14 +22,12 @@ import lombok.NoArgsConstructor;
 public class User {
 
 	@Id
-	@Column(name = "id", unique = true, nullable = false)
-	private String id;
+	@Column(name = "email", unique = true, nullable = false)
+	private String email;
 	@Column(name = "name")
 	private String name;
 	@Column(name = "password")
 	private String password;
-	@Column(name = "email")
-	private String email;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 

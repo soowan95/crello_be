@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.prj3be.entity.User;
 
 public interface AuthRepository extends JpaRepository<User, String> {
-	User getUserById(String id);
+
+	User getUserByEmail(String email);
 }

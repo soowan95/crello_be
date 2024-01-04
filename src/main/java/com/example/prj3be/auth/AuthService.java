@@ -27,9 +27,9 @@ public class AuthService {
 	private final UserRepository userRepository;
 
 
-	public LoginResponse getLoginToken(String id, String password) {
+	public LoginResponse getLoginToken(String email, String password) {
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(id, password);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
 		System.out.println(authenticationToken);
 
@@ -41,12 +41,11 @@ public class AuthService {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-		User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+		User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
 
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())
 			.refreshToken(jwt.getRefreshToken())
-			.id(user.getId())
 			.name(user.getName())
 			.email(user.getEmail())
 			.userRole(user.getUserRole())

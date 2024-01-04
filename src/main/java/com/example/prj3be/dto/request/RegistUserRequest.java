@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 public class RegistUserRequest {
-	@Schema(description = "아이디")
-	private String id;
 	@Schema(description = "유저 이름")
 	private String name;
 	@Schema(description = "비밀번호")

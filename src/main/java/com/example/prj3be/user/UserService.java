@@ -26,11 +26,7 @@ public class UserService {
 		if (this.isEmailExist(request.getEmail()))
 			throw new CustomException(CustomEnum.DUPLICATE_EMAIL);
 
-		if (this.isIdExist(request.getId()))
-			throw new CustomException(CustomEnum.DUPLICATE_ID);
-
 		User user = User.builder()
-			.id(request.getId())
 			.name(request.getName())
 			.password(request.getPassword())
 			.email(request.getEmail())
@@ -45,10 +41,5 @@ public class UserService {
 	private boolean isEmailExist(String email) {
 		Optional<User> byEmail = userRepository.findByEmail(email);
 		return byEmail.isPresent();
-	}
-
-	private boolean isIdExist(String id) {
-		Optional<User> byId = userRepository.findById(id);
-		return byId.isPresent();
 	}
 }

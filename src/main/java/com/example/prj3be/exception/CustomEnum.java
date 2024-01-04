@@ -10,7 +10,6 @@ import lombok.Getter;
 public enum CustomEnum {
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인 정보가 일치하지 않습니다."),
 	DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 사용중인 이메일입니다."),
-	DUPLICATE_ID(HttpStatus.BAD_REQUEST, "이미 사용중인 아이디입니다."),
 	;
 	private final HttpStatus status;
 	private final String msg;
