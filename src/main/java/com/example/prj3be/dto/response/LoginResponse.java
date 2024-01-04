@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "User Login Response")
 public class LoginResponse {
 	@Schema(description = "유저 이름")
 	private String nickname;

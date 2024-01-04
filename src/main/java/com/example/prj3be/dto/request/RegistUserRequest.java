@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
+@Schema(description = "Regist User Request")
 public class RegistUserRequest {
 	@Schema(description = "유저 이름")
 	private String nickname;

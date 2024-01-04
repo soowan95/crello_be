@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Schema(description = "Token Info Response")
 public class TokenInfo {
 
 	@Schema(description = "JWT 인증 타입")

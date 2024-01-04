@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.prj3be.board.BoardRepository;
 import com.example.prj3be.dto.request.RegistUserRequest;
+import com.example.prj3be.entity.Board;
 import com.example.prj3be.entity.User;
 import com.example.prj3be.exception.CustomEnum;
 import com.example.prj3be.exception.CustomException;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final BoardRepository boardRepository;
 	private final PasswordEncoder bCryptPasswordEncoder;
 
 	public void registMember(RegistUserRequest request) {
@@ -39,6 +42,11 @@ public class UserService {
 		user.hashPassword(bCryptPasswordEncoder);
 
 		userRepository.save(user);
+
+		boardRepository.save(Board.builder()
+			.user(user)
+			.title(user.getNickname() + "'s First Board")
+			.build());
 	}
 
 	private boolean isEmailExist(String email) {

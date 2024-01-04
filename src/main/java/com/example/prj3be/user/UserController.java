@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.prj3be.dto.request.RegistUserRequest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -22,18 +23,9 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("regist")
+	@Operation(summary = "regist user", description = "유저 정보를 등록함.")
 	public ResponseEntity<Void> registMember(@RequestBody RegistUserRequest request) {
 		userService.registMember(request);
 		return ResponseEntity.ok().build();
-	}
-
-	@GetMapping("/admin/list")
-	public String adminPage() {
-		return "관리자";
-	}
-
-	@GetMapping("/manager/list")
-	public String managerPage() {
-		return "매니저";
 	}
 }

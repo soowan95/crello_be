@@ -11,11 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.prj3be.config.security.jwt.CustomUserDetailsService;
 import com.example.prj3be.config.security.jwt.JwtAccessDeniedHandler;
 import com.example.prj3be.config.security.jwt.JwtAuthenticationEntryPoint;
-import com.example.prj3be.config.security.jwt.JwtSecurityConfig;
+import com.example.prj3be.config.security.jwt.JwtFilter;
 import com.example.prj3be.config.security.jwt.TokenProvider;
 import com.example.prj3be.user.UserRole;
 
@@ -38,6 +38,7 @@ public class SecurityConfig {
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final TokenProvider tokenProvider;
 
 	// 비밀번호 암호화
 	@Bean
@@ -48,8 +49,7 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring()
-			.requestMatchers("/resources/**",
-				"/api/v1/user/regist");
+			.requestMatchers("/resources/**");
 	}
 
 	@Bean
@@ -61,6 +61,7 @@ public class SecurityConfig {
 				exceptionConfig.accessDeniedHandler(jwtAccessDeniedHandler);
 				exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint);
 			})
+			.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement((sessionConfig) -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
 				.requestMatchers(PERMIT_URL_ARRAY).permitAll()
