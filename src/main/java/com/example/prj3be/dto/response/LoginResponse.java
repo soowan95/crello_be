@@ -8,10 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class LoginResponse {
-	@Schema(description = "아이디")
-	private String id;
 	@Schema(description = "유저 이름")
-	private String name;
+	private String nickname;
 	@Schema(description = "이메일")
 	private String email;
 	@Schema(description = "JWT Access Token")
@@ -22,9 +20,8 @@ public class LoginResponse {
 	private UserRole userRole;
 
 	@Builder
-	public LoginResponse(String id, String name, String email, String accessToken, String refreshToken, UserRole userRole) {
-		this.id = id;
-		this.name = name;
+	public LoginResponse(String nickname, String email, String accessToken, String refreshToken, UserRole userRole) {
+		this.nickname = nickname;
 		this.email = email;
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
