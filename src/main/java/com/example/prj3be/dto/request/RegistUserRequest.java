@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class RegistUserRequest {
 	@Schema(description = "유저 이름")
-	private String name;
+	private String nickname;
 	@Schema(description = "비밀번호")
 	private String password;
 	@Schema(description = "이메일")

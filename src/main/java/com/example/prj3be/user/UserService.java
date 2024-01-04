@@ -23,11 +23,14 @@ public class UserService {
 
 	public void registMember(RegistUserRequest request) {
 
+		if (!request.getEmail().matches(".*\\..*"))
+			throw new CustomException(CustomEnum.INVALID_EMAIL);
+
 		if (this.isEmailExist(request.getEmail()))
 			throw new CustomException(CustomEnum.DUPLICATE_EMAIL);
 
 		User user = User.builder()
-			.name(request.getName())
+			.nickname(request.getNickname() == null ? request.getEmail().split("@")[0] : request.getNickname())
 			.password(request.getPassword())
 			.email(request.getEmail())
 			.userRole(UserRole.USER)
