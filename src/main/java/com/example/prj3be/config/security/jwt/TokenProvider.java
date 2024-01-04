@@ -36,15 +36,18 @@ public class TokenProvider implements InitializingBean {
 	private static final String AUTHORITIES_KEY = "auth";
 
 	private final String secret;
-	private final long tokenValidityInMilliseconds;
+	private final long accessTokenValidityInMilliseconds;
+	private final long refreshTokenValidityInMilliseconds;
 	private Key key;
 
 	public TokenProvider(
 		@Value("${jwt.secret}") String secret,
-		@Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds
+		@Value("${jwt.accessToken-validity-in-seconds}") long accessTokenValidityInMilliseconds,
+		@Value("${jwt.refreshToken-validity-in-seconds}") long refreshTokenValidityInMilliseconds
 	) {
 		this.secret = secret;
-		this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
+		this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+		this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
 	}
 
 	// secret 값을 Base64로 Decode 해서 key 변수에 할당
@@ -69,17 +72,18 @@ public class TokenProvider implements InitializingBean {
 
 		// 토큰 만료 시간 설정
 		long now = (new Date()).getTime();
-		Date validity = new Date(now + this.tokenValidityInMilliseconds);
+		Date accessValidity = new Date(now + this.accessTokenValidityInMilliseconds);
+		Date refreshValidity = new Date(now + this.refreshTokenValidityInMilliseconds);
 
 		String accessToken = Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim(AUTHORITIES_KEY, authorities)
 			.signWith(key, SignatureAlgorithm.HS512)
-			.setExpiration(validity)
+			.setExpiration(accessValidity)
 			.compact();
 
 		String refreshToken = Jwts.builder()
-			.setExpiration(new Date(now + 86400000))
+			.setExpiration(refreshValidity)
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
 
