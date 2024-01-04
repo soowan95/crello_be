@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.prj3be.dto.request.RegistUserRequest;
+import com.example.prj3be.entity.User;
 import com.example.prj3be.exception.CustomEnum;
 import com.example.prj3be.exception.CustomException;
 
@@ -33,6 +34,7 @@ public class UserService {
 			.name(request.getName())
 			.password(request.getPassword())
 			.email(request.getEmail())
+			.userRole(UserRole.USER)
 			.build();
 
 		user.hashPassword(bCryptPasswordEncoder);
@@ -48,9 +50,5 @@ public class UserService {
 	private boolean isIdExist(String id) {
 		Optional<User> byId = userRepository.findById(id);
 		return byId.isPresent();
-	}
-
-	public User findById(String id) {
-		return userRepository.findById(id).orElseThrow(RuntimeException::new);
 	}
 }

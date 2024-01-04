@@ -1,5 +1,7 @@
 package com.example.prj3be.dto.response;
 
+import com.example.prj3be.user.UserRole;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,13 +18,16 @@ public class LoginResponse {
 	private String accessToken;
 	@Schema(description = "JWT Refresh Token")
 	private String refreshToken;
+	@Schema(description = "권한")
+	private UserRole userRole;
 
 	@Builder
-	public LoginResponse(String id, String name, String email, String accessToken, String refreshToken) {
+	public LoginResponse(String id, String name, String email, String accessToken, String refreshToken, UserRole userRole) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
+		this.userRole = userRole;
 	}
 }

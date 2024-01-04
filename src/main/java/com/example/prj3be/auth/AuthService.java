@@ -1,0 +1,55 @@
+package com.example.prj3be.auth;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.prj3be.config.security.jwt.JwtFilter;
+import com.example.prj3be.config.security.jwt.TokenProvider;
+import com.example.prj3be.dto.response.LoginResponse;
+import com.example.prj3be.dto.response.TokenInfo;
+import com.example.prj3be.entity.User;
+import com.example.prj3be.user.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@Transactional(rollbackFor = Exception.class)
+@RequiredArgsConstructor
+public class AuthService {
+
+	private final TokenProvider tokenProvider;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final UserRepository userRepository;
+
+
+	public LoginResponse getLoginToken(String id, String password) {
+
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(id, password);
+
+		System.out.println(authenticationToken);
+
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		TokenInfo jwt = tokenProvider.createToken(authentication);
+
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+		User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+
+		return LoginResponse.builder()
+			.accessToken(jwt.getAccessToken())
+			.refreshToken(jwt.getRefreshToken())
+			.id(user.getId())
+			.name(user.getName())
+			.email(user.getEmail())
+			.userRole(user.getUserRole())
+			.build();
+	}
+}

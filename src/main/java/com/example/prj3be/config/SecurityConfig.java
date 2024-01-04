@@ -6,15 +6,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.prj3be.config.security.jwt.CustomUserDetailsService;
 import com.example.prj3be.config.security.jwt.JwtAccessDeniedHandler;
 import com.example.prj3be.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.example.prj3be.config.security.jwt.JwtSecurityConfig;
 import com.example.prj3be.config.security.jwt.TokenProvider;
+import com.example.prj3be.user.UserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +31,11 @@ public class SecurityConfig {
 		"/api-docs/**",
 		"/swagger-ui/**",
 		"/prj3-ui.html",
+		"/api/v1/user/regist",
 		"/",
-		"/login"
+		"/login/**"
 	};
 
-	private final TokenProvider tokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -53,19 +56,17 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http
-			.csrf().disable()
-			.exceptionHandling()
-			.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-			.accessDeniedHandler(jwtAccessDeniedHandler)
-			.and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.authorizeHttpRequests()
-			.requestMatchers(PERMIT_URL_ARRAY).permitAll()
-			.anyRequest().authenticated()
-			.and()
-			.apply(new JwtSecurityConfig(tokenProvider));
+			.csrf(AbstractHttpConfigurer::disable)
+			.exceptionHandling((exceptionConfig) -> {
+				exceptionConfig.accessDeniedHandler(jwtAccessDeniedHandler);
+				exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint);
+			})
+			.sessionManagement((sessionConfig) -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
+				.requestMatchers(PERMIT_URL_ARRAY).permitAll()
+				.requestMatchers("/api/v1/user/admin/**").hasRole(UserRole.ADMIN.name())
+				.requestMatchers("/api/v1/user/manger/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.MANAGER.name())
+				.anyRequest().authenticated());
 
 		return http.build();
 	}
