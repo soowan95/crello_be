@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.prj3be.dto.request.board.CreateBoardRequest;
+import com.example.prj3be.dto.request.board.UpdateBoardRequest;
 import com.example.prj3be.dto.request.board.UpdateRecentBoardRequest;
 import com.example.prj3be.dto.response.board.AllBoardResponse;
 import com.example.prj3be.dto.response.board.RecentBoardResponse;
@@ -31,7 +32,7 @@ public class BoardController {
 	@PostMapping("/create")
 	@Operation(summary = "Create board", description = "특정 유저의 보드를 생성함.")
 	public ResponseEntity<Void> create(@RequestBody CreateBoardRequest request) {
-		boardService.save(request);
+		boardService.create(request);
 		return ResponseEntity.ok().build();
 	}
 
@@ -51,6 +52,13 @@ public class BoardController {
 	@Operation(summary = "Update Board", description = "가장 최근에 작업한 시간 업데이트")
 	public ResponseEntity<Void> updateBoard(@RequestBody UpdateRecentBoardRequest request) {
 		boardService.updateBoard(request);
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/update")
+	@Operation(summary = "Update Title", description = "해당 보드의 제목 변경")
+	public ResponseEntity<Void> updateTitle(@RequestBody UpdateBoardRequest request) {
+		boardService.updateBoardTitle(request);
 		return ResponseEntity.ok().build();
 	}
 }
