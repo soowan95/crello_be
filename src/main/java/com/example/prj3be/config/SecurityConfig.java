@@ -32,8 +32,10 @@ public class SecurityConfig {
 		"/swagger-ui/**",
 		"/prj3-ui.html",
 		"/api/v1/user/regist",
+		"/api/v1/user/check",
 		"/",
-		"/login/**"
+		"/login/**",
+		"/signup/**"
 	};
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

@@ -1,4 +1,4 @@
-package com.example.prj3be.dto.request;
+package com.example.prj3be.dto.request.board;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

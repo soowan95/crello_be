@@ -1,4 +1,4 @@
-package com.example.prj3be.dto.response;
+package com.example.prj3be.dto.response.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

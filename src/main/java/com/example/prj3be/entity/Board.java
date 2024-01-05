@@ -1,6 +1,6 @@
 package com.example.prj3be.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +29,7 @@ public class Board {
 	@Column(name = "title")
 	private String title;
 	@Column(name = "updated")
-	private LocalDate updated;
+	private LocalDateTime updated;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_email")
 	private User user;

@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.prj3be.config.security.jwt.JwtFilter;
 import com.example.prj3be.config.security.jwt.TokenProvider;
-import com.example.prj3be.dto.response.LoginResponse;
-import com.example.prj3be.dto.response.TokenInfo;
+import com.example.prj3be.dto.response.user.LoginResponse;
+import com.example.prj3be.dto.response.user.TokenInfo;
 import com.example.prj3be.entity.User;
 import com.example.prj3be.exception.CustomEnum;
 import com.example.prj3be.exception.CustomException;

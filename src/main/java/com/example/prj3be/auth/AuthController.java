@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.prj3be.dto.request.LoginRequest;
-import com.example.prj3be.dto.response.LoginResponse;
+import com.example.prj3be.dto.request.user.LoginRequest;
+import com.example.prj3be.dto.response.user.LoginResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

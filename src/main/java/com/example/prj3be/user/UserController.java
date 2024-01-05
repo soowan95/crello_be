@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.prj3be.dto.request.RegistUserRequest;
+import com.example.prj3be.dto.request.user.RegistUserRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +24,15 @@ public class UserController {
 
 	@PostMapping("regist")
 	@Operation(summary = "regist user", description = "유저 정보를 등록함.")
-	public ResponseEntity<Void> registMember(@RequestBody RegistUserRequest request) {
-		userService.registMember(request);
+	public ResponseEntity<Void> registUser(@RequestBody RegistUserRequest request) {
+		userService.registUser(request);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("check")
+	@Operation(summary = "check user email", description = "중복된 이메일이 있는지 확인")
+	public ResponseEntity<Void> checkUserEmail(@RequestParam String email) {
+		userService.checkUserEmail(email);
 		return ResponseEntity.ok().build();
 	}
 }

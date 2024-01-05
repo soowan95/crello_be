@@ -1,4 +1,4 @@
-package com.example.prj3be.dto.response;
+package com.example.prj3be.dto.response.user;
 
 import com.example.prj3be.user.UserRole;
 
