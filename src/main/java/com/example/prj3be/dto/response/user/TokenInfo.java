@@ -1,10 +1,11 @@
-package com.example.prj3be.dto.response;
+package com.example.prj3be.dto.response.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Schema(description = "Token Info Response")
 public class TokenInfo {
 
 	@Schema(description = "JWT 인증 타입")

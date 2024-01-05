@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.prj3be.config.security.jwt.JwtFilter;
 import com.example.prj3be.config.security.jwt.TokenProvider;
-import com.example.prj3be.dto.response.LoginResponse;
-import com.example.prj3be.dto.response.TokenInfo;
+import com.example.prj3be.dto.response.user.LoginResponse;
+import com.example.prj3be.dto.response.user.TokenInfo;
 import com.example.prj3be.entity.User;
+import com.example.prj3be.exception.CustomEnum;
+import com.example.prj3be.exception.CustomException;
 import com.example.prj3be.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,7 @@ public class AuthService {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-		User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())

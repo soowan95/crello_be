@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.prj3be.dto.request.RegistUserRequest;
+import com.example.prj3be.board.BoardRepository;
+import com.example.prj3be.dto.request.user.RegistUserRequest;
+import com.example.prj3be.entity.Board;
 import com.example.prj3be.entity.User;
 import com.example.prj3be.exception.CustomEnum;
 import com.example.prj3be.exception.CustomException;
@@ -19,15 +21,13 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final BoardRepository boardRepository;
 	private final PasswordEncoder bCryptPasswordEncoder;
 
-	public void registMember(RegistUserRequest request) {
+	public void registUser(RegistUserRequest request) {
 
 		if (!request.getEmail().matches(".*\\..*"))
 			throw new CustomException(CustomEnum.INVALID_EMAIL);
-
-		if (this.isEmailExist(request.getEmail()))
-			throw new CustomException(CustomEnum.DUPLICATE_EMAIL);
 
 		User user = User.builder()
 			.nickname(request.getNickname() == null ? request.getEmail().split("@")[0] : request.getNickname())
@@ -39,6 +39,16 @@ public class UserService {
 		user.hashPassword(bCryptPasswordEncoder);
 
 		userRepository.save(user);
+
+		boardRepository.save(Board.builder()
+			.user(user)
+			.title(user.getNickname() + "'s First Board")
+			.build());
+	}
+
+	public void checkUserEmail(String email) {
+		if (this.isEmailExist(email))
+			throw new CustomException(CustomEnum.DUPLICATE_EMAIL);
 	}
 
 	private boolean isEmailExist(String email) {

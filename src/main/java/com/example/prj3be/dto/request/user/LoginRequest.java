@@ -1,9 +1,10 @@
-package com.example.prj3be.dto.request;
+package com.example.prj3be.dto.request.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
+@Schema(description = "User Login Request")
 public class LoginRequest {
 	@Schema(description = "이메일")
 	private String email;

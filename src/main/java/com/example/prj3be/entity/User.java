@@ -1,5 +1,7 @@
 package com.example.prj3be.entity;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.prj3be.user.UserRole;
@@ -9,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +33,8 @@ public class User {
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+	@OneToMany(mappedBy = "user")
+	private List<Board> boards;
 
 	public User hashPassword(PasswordEncoder passwordEncoder) {
 		this.password = passwordEncoder.encode(this.password);
