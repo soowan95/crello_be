@@ -55,7 +55,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-def querydslSrcDir = "src/main/generated"
+def querydslSrcDir = "generated/querydsl"
 
 clean {
     delete file(querydslSrcDir)
