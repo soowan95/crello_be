@@ -15,12 +15,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.v1.crello.dto.response.user.TokenInfo;
+import com.v1.crello.exception.CustomEnum;
+import com.v1.crello.exception.CustomException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -83,8 +87,10 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 
 		String refreshToken = Jwts.builder()
-			.setExpiration(refreshValidity)
+			.setSubject(authentication.getName())
+			.claim(AUTHORITIES_KEY, authorities)
 			.signWith(key, SignatureAlgorithm.HS512)
+			.setExpiration(refreshValidity)
 			.compact();
 
 		return TokenInfo.builder()
@@ -92,6 +98,18 @@ public class TokenProvider implements InitializingBean {
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.build();
+	}
+
+	public String refreshToken(UserDetails userDetails) {
+
+		Date validity = new Date((new Date()).getTime() + this.accessTokenValidityInMilliseconds);
+
+		return Jwts.builder()
+			.setSubject(userDetails.getUsername())
+			.claim(AUTHORITIES_KEY, userDetails.getAuthorities())
+			.signWith(key, SignatureAlgorithm.HS512)
+			.setExpiration(validity)
+			.compact();
 	}
 
 	// 토큰에 담겨있는 정보를 이용해 Authentication 객체 리턴
@@ -129,11 +147,16 @@ public class TokenProvider implements InitializingBean {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
+		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+			logger.info("잘못된 JWT 토큰 서명");
+		} catch (ExpiredJwtException e) {
+			logger.info("만료된 JWT 토큰");
+			throw new JwtException("만료된 JWT 토큰");
+		} catch (UnsupportedJwtException e) {
+			logger.info("지원되지 않은 JWT 토큰");
+		} catch (IllegalArgumentException e) {
+			logger.info("잘못된 JWT 토큰");
 		}
-		catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) { logger.info("잘못된 JWT 토큰 서명"); }
-		catch (ExpiredJwtException e) { logger.info("만료된 JWT 토큰"); }
-		catch (UnsupportedJwtException e) { logger.info("지원되지 않은 JWT 토큰"); }
-		catch (IllegalArgumentException e) { logger.info("잘못된 JWT 토큰"); }
 		return false;
 	}
 }
