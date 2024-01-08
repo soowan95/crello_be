@@ -36,8 +36,8 @@ public class SecurityConfig {
 		"/api/v1/user/regist",
 		"/api/v1/user/check",
 		"/",
-		"/login/**",
-		"/signup/**"
+		"/login",
+		"/signup"
 	};
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -47,12 +47,6 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring()
-			.requestMatchers("/resources/**");
 	}
 
 	CorsConfigurationSource corsConfigurationSource() {

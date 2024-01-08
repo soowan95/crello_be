@@ -31,6 +31,8 @@ public class User {
 	private String nickname;
 	@Column(name = "password")
 	private String password;
+	@Column(name = "rtk")
+	private String refreshToken;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 	@OneToMany(mappedBy = "user")
