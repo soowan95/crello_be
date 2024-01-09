@@ -60,7 +60,6 @@ public class UserService {
 	}
 
 	private boolean isEmailExist(String email) {
-		Optional<User> byEmail = userRepository.findByEmail(email);
-		return byEmail.isPresent();
+		return userRepository.findByEmail(email).isPresent();
 	}
 }

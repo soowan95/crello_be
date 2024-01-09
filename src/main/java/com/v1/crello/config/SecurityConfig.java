@@ -1,5 +1,7 @@
 package com.v1.crello.config;
 
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,11 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.v1.crello.config.security.jwt.JwtAccessDeniedHandler;
 import com.v1.crello.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.v1.crello.config.security.jwt.JwtFilter;
-import com.v1.crello.config.security.jwt.TokenProvider;
 import com.v1.crello.user.UserRole;
 
 import lombok.RequiredArgsConstructor;
@@ -30,17 +32,17 @@ public class SecurityConfig {
 	private static final String[] PERMIT_URL_ARRAY = {
 		"/api-docs/**",
 		"/swagger-ui/**",
-		"/prj3-ui.html",
+		"/crello-ui.html",
 		"/api/v1/user/regist",
 		"/api/v1/user/check",
 		"/",
-		"/login/**",
-		"/signup/**"
+		"/login",
+		"/logout",
+		"/signup"
 	};
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-	private final TokenProvider tokenProvider;
+	private final JwtFilter jwtFilter;
 
 	// 비밀번호 암호화
 	@Bean
@@ -48,22 +50,30 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring()
-			.requestMatchers("/resources/**");
+	// cors 설정
+	CorsConfigurationSource corsConfigurationSource() {
+		return request -> {
+			CorsConfiguration config = new CorsConfiguration();
+			config.setAllowedHeaders(Collections.singletonList("*"));
+			config.setAllowedMethods(Collections.singletonList("*"));
+
+			config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+			config.setAllowCredentials(true);
+
+			return config;
+		};
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http
+			.logout((logoutConfig) -> logoutConfig.logoutUrl("logout").logoutSuccessUrl("/"))
+			.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
-			.exceptionHandling((exceptionConfig) -> {
-				exceptionConfig.accessDeniedHandler(jwtAccessDeniedHandler);
-				exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint);
-			})
-			.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.exceptionHandling(
+				(exceptionConfig) -> exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement((sessionConfig) -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
 				.requestMatchers(PERMIT_URL_ARRAY).permitAll()

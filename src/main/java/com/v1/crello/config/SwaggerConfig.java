@@ -19,9 +19,9 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI openAPI() {
 		Info info = new Info()
-			.title("prj3 API Document")
+			.title("crello API Document")
 			.version("v0.0.1")
-			.description("3번째 프로젝트 API 명세서입니다.");
+			.description("Crello API 명세서입니다.");
 
 		SecurityScheme securityScheme = new SecurityScheme()
 			.type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
