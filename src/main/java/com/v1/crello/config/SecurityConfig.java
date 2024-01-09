@@ -32,11 +32,12 @@ public class SecurityConfig {
 	private static final String[] PERMIT_URL_ARRAY = {
 		"/api-docs/**",
 		"/swagger-ui/**",
-		"/prj3-ui.html",
+		"/crello-ui.html",
 		"/api/v1/user/regist",
 		"/api/v1/user/check",
 		"/",
 		"/login",
+		"/logout",
 		"/signup"
 	};
 
@@ -49,6 +50,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
+	// cors 설정
 	CorsConfigurationSource corsConfigurationSource() {
 		return request -> {
 			CorsConfiguration config = new CorsConfiguration();
@@ -66,6 +68,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http
+			.logout((logoutConfig) -> logoutConfig.logoutUrl("logout").logoutSuccessUrl("/"))
 			.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.exceptionHandling(

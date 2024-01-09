@@ -45,7 +45,7 @@ public class AuthService {
 
 		TokenInfo jwt = tokenProvider.createToken(authentication);
 
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+		User user = this.findUserByEmail(email);
 
 		userRepository.save(User.builder()
 			.boards(user.getBoards())
@@ -67,8 +67,7 @@ public class AuthService {
 
 	public void logout(LogoutRequest request) {
 
-		User user = userRepository.findByEmail(request.getEmail())
-			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+		User user = this.findUserByEmail(request.getEmail());
 
 		userRepository.save(User.builder()
 			.boards(user.getBoards())
@@ -81,8 +80,7 @@ public class AuthService {
 
 	public RtkResponse refreshAccesToken(String refreshToken, String email) {
 
-		User user = userRepository.findByEmail(email)
-			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+		User user = this.findUserByEmail(email);
 
 		if (user.getRefreshToken().equals(refreshToken)) {
 
@@ -96,4 +94,8 @@ public class AuthService {
 		} else throw new CustomException(CustomEnum.INVALID_EMAIL);
 	}
 
+	public User findUserByEmail(String email) {
+		return userRepository.findByEmail(email)
+			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+	}
 }

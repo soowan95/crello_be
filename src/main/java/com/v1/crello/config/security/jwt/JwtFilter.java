@@ -1,7 +1,6 @@
 package com.v1.crello.config.security.jwt;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.v1.crello.dto.response.jwt.JwtExpireResponse;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,11 +32,8 @@ public class JwtFilter extends GenericFilterBean {
 	private final TokenProvider tokenProvider;
 
 	// doFilter : 토큰의 인증 정보를 SecurityContext에 저장
-
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
-		IOException,
-		ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)  {
 
 		System.out.println("doFilter");
 
