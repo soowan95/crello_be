@@ -1,7 +1,6 @@
 package com.v1.crello.user;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.v1.crello.board.BoardRepository;
 import com.v1.crello.boardList.BoardListService;
 import com.v1.crello.dto.request.user.RegistUserRequest;
-import com.v1.crello.entity.Board;
-import com.v1.crello.entity.User;
+import com.v1.crello.board.Board;
 import com.v1.crello.exception.CustomEnum;
 import com.v1.crello.exception.CustomException;
 

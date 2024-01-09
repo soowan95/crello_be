@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.v1.crello.auth.AuthRepository;
-import com.v1.crello.entity.User;
+import com.v1.crello.user.User;
 
 import lombok.RequiredArgsConstructor;
 

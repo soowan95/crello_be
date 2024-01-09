@@ -1,7 +1,7 @@
 package com.v1.crello.boardList.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.v1.crello.entity.QBoardList;
+import com.v1.crello.boardList.QBoardList;
 
 import lombok.RequiredArgsConstructor;
 

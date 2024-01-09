@@ -1,7 +1,9 @@
-package com.v1.crello.entity;
+package com.v1.crello.boardList;
 
-import java.time.LocalDateTime;
 import java.util.List;
+
+import com.v1.crello.board.Board;
+import com.v1.crello.card.Card;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,11 +20,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "board")
+@Entity(name = "list")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Board {
+public class BoardList {
 
 	@Id
 	@Column(name = "id")
@@ -30,13 +32,9 @@ public class Board {
 	private Integer id;
 	@Column(name = "title")
 	private String title;
-	@Column(name = "updated")
-	private LocalDateTime updated;
-	@Column(name = "color")
-	private String color;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_email")
-	private User user;
-	@OneToMany(mappedBy = "board")
-	private List<BoardList> boardLists;
+	@JoinColumn(name = "board_id")
+	private Board board;
+	@OneToMany(mappedBy = "boardList")
+	List<Card> cards;
 }
