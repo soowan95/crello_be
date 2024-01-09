@@ -35,6 +35,8 @@ public class AuthService {
 
 	public LoginResponse getLoginToken(String email, String password) {
 
+		User user = this.findUserByEmail(email);
+
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
 			password);
 
@@ -44,8 +46,6 @@ public class AuthService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		TokenInfo jwt = tokenProvider.createToken(authentication);
-
-		User user = this.findUserByEmail(email);
 
 		userRepository.save(User.builder()
 			.boards(user.getBoards())
@@ -91,7 +91,8 @@ public class AuthService {
 			return RtkResponse.builder()
 				.accessToken(accessToken)
 				.build();
-		} else throw new CustomException(CustomEnum.INVALID_EMAIL);
+		} else
+			throw new CustomException(CustomEnum.INVALID_EMAIL);
 	}
 
 	public User findUserByEmail(String email) {

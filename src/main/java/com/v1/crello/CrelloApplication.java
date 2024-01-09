@@ -47,6 +47,7 @@ public class CrelloApplication {
 			.user(user)
 			.title(user.getNickname() + "'s First Board")
 			.updated(LocalDateTime.now())
+			.color("#1d285d")
 			.build();
 
 		boardRepository.save(board);

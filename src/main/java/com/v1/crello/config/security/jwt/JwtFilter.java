@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -14,7 +15,9 @@ import org.springframework.web.filter.GenericFilterBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.v1.crello.dto.response.jwt.JwtExpireResponse;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +36,9 @@ public class JwtFilter extends GenericFilterBean {
 
 	// doFilter : 토큰의 인증 정보를 SecurityContext에 저장
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)  {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
+		ServletException,
+		IOException {
 
 		System.out.println("doFilter");
 
@@ -53,7 +58,7 @@ public class JwtFilter extends GenericFilterBean {
 
 			// 생성한 필터 실행
 			chain.doFilter(request, response);
-		} catch (Exception e) {
+		} catch (ExpiredJwtException e) {
 			// JwtException이 발생한 경우
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 			httpServletResponse.setContentType("application/json");

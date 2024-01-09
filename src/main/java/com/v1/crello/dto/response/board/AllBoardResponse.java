@@ -15,4 +15,6 @@ public class AllBoardResponse {
 	private String title;
 	@Schema(description = "보드 아이디")
 	private Integer id;
+	@Schema(description = "보드 배경색")
+	private String color;
 }
