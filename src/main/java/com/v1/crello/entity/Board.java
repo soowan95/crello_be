@@ -32,6 +32,8 @@ public class Board {
 	private String title;
 	@Column(name = "updated")
 	private LocalDateTime updated;
+	@Column(name = "color")
+	private String color;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_email")
 	private User user;

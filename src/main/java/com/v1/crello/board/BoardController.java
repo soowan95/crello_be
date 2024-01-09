@@ -3,6 +3,7 @@ package com.v1.crello.board;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,6 +60,13 @@ public class BoardController {
 	@Operation(summary = "Update Title", description = "해당 보드의 제목 변경")
 	public ResponseEntity<Void> updateTitle(@RequestBody UpdateBoardRequest request) {
 		boardService.updateBoardTitle(request);
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/delete")
+	@Operation(summary = "Delete Board", description = "해당 보드 삭제")
+	public ResponseEntity<Void> deleteBoard(@RequestParam Integer id) {
+		boardService.deleteBoard(id);
 		return ResponseEntity.ok().build();
 	}
 }

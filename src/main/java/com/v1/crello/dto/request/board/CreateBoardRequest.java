@@ -11,4 +11,6 @@ public class CreateBoardRequest {
 	private String title;
 	@Schema(description = "유저 이메일")
 	private String email;
+	@Schema(description = "보드 배경색")
+	private String color;
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.v1.crello.boardList.BoardListRepository;
 import com.v1.crello.boardList.BoardListService;
 import com.v1.crello.dto.request.board.CreateBoardRequest;
 import com.v1.crello.dto.request.board.UpdateBoardRequest;
@@ -29,6 +30,7 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final UserRepository userRepository;
 	private final BoardListService boardListService;
+	private final BoardListRepository boardListRepository;
 
 	public void create(CreateBoardRequest request) {
 
@@ -39,6 +41,7 @@ public class BoardService {
 			.user(user)
 			.title(request.getTitle())
 			.updated(LocalDateTime.now())
+			.color(request.getColor())
 			.build();
 
 		boardRepository.save(board);
@@ -57,6 +60,7 @@ public class BoardService {
 			responses.add(AllBoardResponse.builder()
 				.id(board.getId())
 				.title(board.getTitle())
+				.color(board.getColor())
 				.build());
 		}
 
@@ -67,9 +71,12 @@ public class BoardService {
 
 		Board board = boardRepository.findByUserEmailLimitOne(email);
 
+		if (board == null) return null;
+
 		return RecentBoardResponse.builder()
 			.id(board.getId())
 			.title(board.getTitle())
+			.color(board.getColor())
 			.build();
 	}
 
@@ -82,6 +89,7 @@ public class BoardService {
 			.updated(LocalDateTime.now())
 			.title(board.getTitle())
 			.user(board.getUser())
+			.color(board.getColor())
 			.build());
 	}
 
@@ -94,6 +102,13 @@ public class BoardService {
 			.updated(LocalDateTime.now())
 			.title(request.getTitle())
 			.user(board.getUser())
+			.color(board.getColor())
 			.build());
+	}
+
+	public void deleteBoard(Integer id) {
+		boardListRepository.deleteByBoardId(id);
+
+		boardRepository.deleteById(id);
 	}
 }
