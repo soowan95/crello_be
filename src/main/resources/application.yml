@@ -20,7 +20,7 @@ spring:
   config:
     activate:
       on-profile: profile1
-    import: custom.yml
+    import: custom_dev.yml
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
@@ -40,8 +40,6 @@ server:
 ---
 spring:
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect

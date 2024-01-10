@@ -15,6 +15,7 @@ public enum CustomEnum {
 	INVALID_BOARD_ID(HttpStatus.BAD_REQUEST, "일치하는 보드 정보가 없습니다."),
 	INVALID_LIST_ID(HttpStatus.BAD_REQUEST, "일치하는 리스트 정보가 없습니다."),
 	INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 사용자 정보입니다."),
+	INVALID_CARD_ID(HttpStatus.BAD_REQUEST, "일치하는 카드 정보가 없습니다."),
 	;
 	private final HttpStatus status;
 	private final String msg;
