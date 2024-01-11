@@ -83,7 +83,7 @@ public class UserService {
 		User user = userRepository.findByEmail(request.getEmail())
 			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
 
-		if (user.getPhoto() != null)
+		if (user.getPhoto() != null && photo != null)
 			deleteOnS3(user.getEmail(), user.getPhoto());
 
 		User updateUser = User.builder()
@@ -91,12 +91,12 @@ public class UserService {
 			.userRole(user.getUserRole())
 			.boards(user.getBoards())
 			.refreshToken(user.getRefreshToken())
-			.password(request.getPassword())
-			.nickname(request.getNickname())
-			.photo(photo == null ? null : photo.getOriginalFilename())
+			.password(request.getPassword() == null ? user.getPassword() : request.getPassword())
+			.nickname(request.getNickname() == null ? user.getNickname() : request.getNickname())
+			.photo(photo == null ? user.getPhoto() : photo.getOriginalFilename())
 			.build();
 
-		updateUser.hashPassword(bCryptPasswordEncoder);
+		if (request.getPassword() != null) updateUser.hashPassword(bCryptPasswordEncoder);
 
 		userRepository.save(updateUser);
 
