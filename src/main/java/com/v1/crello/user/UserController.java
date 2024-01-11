@@ -3,12 +3,16 @@ package com.v1.crello.user;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.v1.crello.dto.request.user.RegistUserRequest;
+import com.v1.crello.dto.request.user.UpdateUserRequest;
+import com.v1.crello.dto.response.user.UpdateUserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,16 +27,23 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("regist")
-	@Operation(summary = "regist user", description = "유저 정보를 등록함.")
-	public ResponseEntity<Void> registUser(@RequestBody RegistUserRequest request) {
-		userService.registUser(request);
+	@Operation(summary = "Regist User", description = "유저 정보를 등록함.")
+	public ResponseEntity<Void> regist(@RequestBody RegistUserRequest request) {
+		userService.regist(request);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("check")
-	@Operation(summary = "check user email", description = "중복된 이메일이 있는지 확인")
+	@Operation(summary = "Check User Email", description = "중복된 이메일이 있는지 확인")
 	public ResponseEntity<Void> checkUserEmail(@RequestParam String email) {
 		userService.checkUserEmail(email);
 		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("update")
+	@Operation(summary = "Update User", description = "유저 정보 업데이트")
+	public ResponseEntity<UpdateUserResponse> update(@RequestBody UpdateUserRequest request,
+													 @RequestParam(value = "photo", required = false) MultipartFile photo) {
+		return ResponseEntity.ok(userService.update(request, photo));
 	}
 }

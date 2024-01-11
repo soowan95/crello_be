@@ -33,6 +33,8 @@ public class User {
 	private String password;
 	@Column(name = "rtk")
 	private String refreshToken;
+	@Column(name = "photo")
+	private String photo;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 	@OneToMany(mappedBy = "user")

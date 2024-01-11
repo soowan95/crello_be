@@ -1,5 +1,6 @@
 package com.v1.crello.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,9 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final CustomUserDetailsService customUserDetailsService;
 
+	@Value("${image.file.prefix}")
+	private String urlPrefix;
+
 	public LoginResponse getLoginToken(String email, String password) {
 
 		User user = this.findUserByEmail(email);
@@ -51,14 +55,22 @@ public class AuthService {
 			.password(user.getPassword())
 			.userRole(user.getUserRole())
 			.nickname(user.getNickname())
+			.photo(user.getPhoto())
 			.refreshToken(jwt.getRefreshToken())
 			.build());
+
+		String photoUrl;
+		if (user.getPhoto() == null)
+			photoUrl = null;
+		else
+			photoUrl = urlPrefix + "crello/user/" + user.getEmail() + "/" + user.getPhoto();
 
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())
 			.refreshToken(jwt.getRefreshToken())
 			.nickname(user.getNickname())
 			.email(user.getEmail())
+			.photo(photoUrl)
 			.userRole(user.getUserRole())
 			.build();
 	}
