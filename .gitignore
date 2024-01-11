@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 custom.yml
-generated/
+custom_dev.yml

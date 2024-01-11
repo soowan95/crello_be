@@ -1,10 +1,10 @@
-package com.v1.crello.entity;
+package com.v1.crello.user;
 
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.v1.crello.user.UserRole;
+import com.v1.crello.board.Board;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,8 +1,8 @@
 package com.v1.crello.board.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.v1.crello.entity.Board;
-import com.v1.crello.entity.QBoard;
+import com.v1.crello.board.Board;
+import com.v1.crello.board.QBoard;
 
 import lombok.RequiredArgsConstructor;
 

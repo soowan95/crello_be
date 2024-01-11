@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.v1.crello.board.BoardRepository;
+import com.v1.crello.card.Card;
+import com.v1.crello.card.CardRepository;
 import com.v1.crello.dto.request.boardList.AddBoardListRequest;
 import com.v1.crello.dto.request.boardList.MoveBoardListRequest;
 import com.v1.crello.dto.request.boardList.UpdateBoardListRequest;
 import com.v1.crello.dto.response.boardList.AllBoardListResponse;
-import com.v1.crello.entity.Board;
-import com.v1.crello.entity.BoardList;
+import com.v1.crello.board.Board;
+import com.v1.crello.dto.response.card.AllCardResponse;
 import com.v1.crello.exception.CustomEnum;
 import com.v1.crello.exception.CustomException;
 
@@ -25,6 +27,7 @@ public class BoardListService {
 
 	private final BoardListRepository boardListRepository;
 	private final BoardRepository boardRepository;
+	private final CardRepository cardRepository;
 
 	public void initialCreate(Board board) {
 		String[] listTitles = new String[] {"To do", "Doing", "Done"};
@@ -42,9 +45,19 @@ public class BoardListService {
 		List<AllBoardListResponse> responses = new ArrayList<>();
 
 		for (BoardList list : lists) {
+			List<AllCardResponse> cards = cardRepository.findByBoardList_Id(list.getId())
+				.stream()
+				.map(a -> AllCardResponse.builder()
+					.content(a.getContent())
+					.id(a.getId())
+					.title(a.getTitle())
+					.build())
+				.toList();
+
 			responses.add(AllBoardListResponse.builder()
 				.id(list.getId())
 				.title(list.getTitle())
+				.cards(cards)
 				.build());
 		}
 

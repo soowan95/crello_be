@@ -1,4 +1,6 @@
-package com.v1.crello.entity;
+package com.v1.crello.card;
+
+import com.v1.crello.boardList.BoardList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,11 +16,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "list")
+@Entity(name = "card")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BoardList {
+public class Card {
 
 	@Id
 	@Column(name = "id")
@@ -26,7 +28,9 @@ public class BoardList {
 	private Integer id;
 	@Column(name = "title")
 	private String title;
+	@Column(name = "content", length = 2000)
+	private String content;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id")
-	private Board board;
+	@JoinColumn(name = "list_id")
+	BoardList boardList;
 }

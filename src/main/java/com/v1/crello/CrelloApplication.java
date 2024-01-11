@@ -10,8 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.v1.crello.board.BoardRepository;
 import com.v1.crello.boardList.BoardListService;
-import com.v1.crello.entity.Board;
-import com.v1.crello.entity.User;
+import com.v1.crello.board.Board;
+import com.v1.crello.user.User;
 import com.v1.crello.user.UserRepository;
 import com.v1.crello.user.UserRole;
 

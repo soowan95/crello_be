@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.v1.crello.entity.User;
+import com.v1.crello.user.User;
 
 import lombok.RequiredArgsConstructor;
 
