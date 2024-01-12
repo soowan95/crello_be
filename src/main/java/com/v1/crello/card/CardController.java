@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.v1.crello.dto.request.card.AddCardRequest;
+import com.v1.crello.dto.request.card.MoveCardRequest;
 import com.v1.crello.dto.request.card.UpdateCardRequest;
 import com.v1.crello.dto.response.boardList.AllBoardListResponse;
 
@@ -35,5 +36,11 @@ public class CardController {
 	@Operation(summary = "Update Card", description = "카드 내용 수정")
 	public ResponseEntity<List<AllBoardListResponse>> update(@RequestBody UpdateCardRequest request) {
 		return ResponseEntity.ok(cardService.update(request));
+	}
+
+	@PutMapping("/move")
+	@Operation(summary = "Move Card", description = "카드 이동")
+	public ResponseEntity<List<AllBoardListResponse>> move(@RequestBody MoveCardRequest request) {
+		return ResponseEntity.ok(cardService.move(request));
 	}
 }
