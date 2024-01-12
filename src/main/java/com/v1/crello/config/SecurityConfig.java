@@ -35,6 +35,7 @@ public class SecurityConfig {
 		"/crello-ui.html",
 		"/api/v1/user/regist",
 		"/api/v1/user/check",
+		"/api/v1/user/changepw",
 		"/",
 		"/login",
 		"/logout",

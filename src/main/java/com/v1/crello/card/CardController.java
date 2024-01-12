@@ -40,7 +40,8 @@ public class CardController {
 
 	@PutMapping("/move")
 	@Operation(summary = "Move Card", description = "카드 이동")
-	public ResponseEntity<List<AllBoardListResponse>> move(@RequestBody MoveCardRequest request) {
-		return ResponseEntity.ok(cardService.move(request));
+	public ResponseEntity<Void> move(@RequestBody MoveCardRequest request) {
+		cardService.move(request);
+		return ResponseEntity.ok().build();
 	}
 }

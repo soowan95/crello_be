@@ -18,6 +18,7 @@ public enum CustomEnum {
 	INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 사용자 정보입니다."),
 	INVALID_CARD_ID(HttpStatus.BAD_REQUEST, "일치하는 카드 정보가 없습니다."),
 	IOEXCEPTION(HttpStatus.BAD_REQUEST, "파일을 읽는 중 문제가 발생했습니다."),
+	SAME_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 일치합니다."),
 	;
 	private final HttpStatus status;
 	private final String msg;
