@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.v1.crello.board.Board;
 import com.v1.crello.board.BoardRepository;
 import com.v1.crello.boardList.BoardListService;
+import com.v1.crello.dto.request.user.ChangePasswordRequest;
 import com.v1.crello.dto.request.user.RegistUserRequest;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
@@ -112,6 +113,26 @@ public class UserService {
 			.nickname(request.getNickname())
 			.photo(photoUrl)
 			.build();
+	}
+
+	public void changepw(ChangePasswordRequest request) {
+		User user = userRepository.findByEmail(request.getEmail())
+			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+
+		if (user.checkPassword(request.getPassword(), bCryptPasswordEncoder)) throw new CustomException(CustomEnum.SAME_PASSWORD);
+
+		User updateUser = User.builder()
+			.email(user.getEmail())
+			.userRole(user.getUserRole())
+			.boards(user.getBoards())
+			.password(request.getPassword())
+			.nickname(user.getNickname())
+			.photo(user.getPhoto())
+			.build();
+
+		updateUser.hashPassword(bCryptPasswordEncoder);
+
+		userRepository.save(updateUser);
 	}
 
 	public void delete(String password, String email) {

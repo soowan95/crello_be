@@ -56,7 +56,7 @@ public class CardService {
 		return boardListService.findByBoardId(request.getBoardId());
 	}
 
-	public List<AllBoardListResponse> move(MoveCardRequest request) {
+	public void move(MoveCardRequest request) {
 		Card card = cardRepository.findById(request.getCardId())
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_CARD_ID));
 
@@ -82,13 +82,6 @@ public class CardService {
 						.title(c.getTitle())
 						.build());
 				}
-				cardRepository.save(Card.builder()
-					.id(card.getId())
-					.boardList(nextList)
-					.content(card.getContent())
-					.title(card.getTitle())
-					.index(request.getNextIndex())
-					.build());
 			} else {
 				for (int i = request.getNextIndex(); i < card.getIndex(); i++) {
 					Card c = nextCards.get(i);
@@ -100,13 +93,6 @@ public class CardService {
 						.title(c.getTitle())
 						.build());
 				}
-				cardRepository.save(Card.builder()
-					.id(card.getId())
-					.boardList(nextList)
-					.content(card.getContent())
-					.title(card.getTitle())
-					.index(request.getNextIndex())
-					.build());
 			}
 		} else {
 			for (int i = request.getNextIndex(); i < nextCards.size(); i++) {
@@ -129,15 +115,14 @@ public class CardService {
 					.title(c.getTitle())
 					.build());
 			}
-			cardRepository.save(Card.builder()
-				.id(card.getId())
-				.boardList(nextList)
-				.content(card.getContent())
-				.title(card.getTitle())
-				.index(request.getNextIndex())
-				.build());
 		}
 
-		return boardListService.findByBoardId(request.getBoardId());
+		cardRepository.save(Card.builder()
+			.id(card.getId())
+			.boardList(nextList)
+			.content(card.getContent())
+			.title(card.getTitle())
+			.index(request.getNextIndex())
+			.build());
 	}
 }
