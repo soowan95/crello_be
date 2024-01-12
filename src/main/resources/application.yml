@@ -17,6 +17,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
   config:
     activate:
       on-profile: profile1
@@ -49,9 +53,27 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
   config:
     activate:
       on-profile: profile2
     import: custom.yml
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: crello-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+  show-login-endpoint: true
 server:
   port: 8081

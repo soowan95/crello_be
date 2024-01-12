@@ -6,6 +6,7 @@ import java.util.List;
 import com.v1.crello.boardList.BoardList;
 import com.v1.crello.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,6 +41,6 @@ public class Board {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_email")
 	private User user;
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 	private List<BoardList> boardLists;
 }
