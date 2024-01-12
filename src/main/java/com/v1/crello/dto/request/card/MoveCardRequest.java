@@ -8,6 +8,7 @@ import lombok.Data;
 public class MoveCardRequest {
 
 	private Integer cardId;
+	private Integer nextIndex;
 	private Integer nextListId;
 	private Integer prevListId;
 	private Integer boardId;

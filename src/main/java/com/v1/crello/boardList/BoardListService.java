@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.v1.crello.board.BoardRepository;
-import com.v1.crello.card.Card;
 import com.v1.crello.card.CardRepository;
 import com.v1.crello.dto.request.boardList.AddBoardListRequest;
 import com.v1.crello.dto.request.boardList.MoveBoardListRequest;
@@ -45,7 +44,7 @@ public class BoardListService {
 		List<AllBoardListResponse> responses = new ArrayList<>();
 
 		for (BoardList list : lists) {
-			List<AllCardResponse> cards = cardRepository.findByBoardList_Id(list.getId())
+			List<AllCardResponse> cards = cardRepository.findByBoardList_IdOrderByIndex(list.getId())
 				.stream()
 				.map(a -> AllCardResponse.builder()
 					.content(a.getContent())
