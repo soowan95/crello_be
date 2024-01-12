@@ -1,6 +1,7 @@
 package com.v1.crello.user;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,8 +43,17 @@ public class UserController {
 
 	@PutMapping("update")
 	@Operation(summary = "Update User", description = "유저 정보 업데이트")
-	public ResponseEntity<UpdateUserResponse> update(@RequestBody UpdateUserRequest request,
-													 @RequestParam(value = "photo", required = false) MultipartFile photo) {
+	public ResponseEntity<UpdateUserResponse> update(UpdateUserRequest request,
+		@RequestParam(value = "photo", required = false) MultipartFile photo) {
 		return ResponseEntity.ok(userService.update(request, photo));
+	}
+
+	@DeleteMapping("delete")
+	@Operation(summary = "Delete User", description = "유저 탈퇴")
+	public ResponseEntity<Void> delete(@RequestParam String password,
+		@RequestParam String email) {
+		userService.delete(password, email);
+
+		return ResponseEntity.ok().build();
 	}
 }

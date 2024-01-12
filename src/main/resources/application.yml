@@ -17,6 +17,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
   config:
     activate:
       on-profile: profile1
@@ -49,6 +53,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
   config:
     activate:
       on-profile: profile2

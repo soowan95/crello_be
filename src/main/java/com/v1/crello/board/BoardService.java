@@ -106,7 +106,6 @@ public class BoardService {
 	}
 
 	public void deleteBoard(Integer id) {
-		boardListRepository.deleteByBoardId(id);
 
 		boardRepository.deleteById(id);
 	}

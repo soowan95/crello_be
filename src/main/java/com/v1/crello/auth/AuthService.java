@@ -85,6 +85,7 @@ public class AuthService {
 			.password(user.getPassword())
 			.userRole(user.getUserRole())
 			.nickname(user.getNickname())
+			.photo(user.getPhoto())
 			.build());
 	}
 

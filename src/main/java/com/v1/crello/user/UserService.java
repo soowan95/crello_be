@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.v1.crello.board.Board;
 import com.v1.crello.board.BoardRepository;
 import com.v1.crello.boardList.BoardListService;
 import com.v1.crello.dto.request.user.RegistUserRequest;
-import com.v1.crello.board.Board;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
 import com.v1.crello.exception.CustomEnum;
@@ -96,7 +96,8 @@ public class UserService {
 			.photo(photo == null ? user.getPhoto() : photo.getOriginalFilename())
 			.build();
 
-		if (request.getPassword() != null) updateUser.hashPassword(bCryptPasswordEncoder);
+		if (request.getPassword() != null)
+			updateUser.hashPassword(bCryptPasswordEncoder);
 
 		userRepository.save(updateUser);
 
@@ -113,8 +114,18 @@ public class UserService {
 			.build();
 	}
 
+	public void delete(String password, String email) {
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
+
+		if (user.checkPassword(password, bCryptPasswordEncoder))
+			userRepository.delete(user);
+		else
+			throw new CustomException(CustomEnum.FORBIDDEN);
+	}
+
 	public void uploadOnS3(String email, MultipartFile file) {
-		String key = "crello/user" + email + "/" + file.getOriginalFilename();
+		String key = "crello/user/" + email + "/" + file.getOriginalFilename();
 
 		PutObjectRequest objectRequest = PutObjectRequest.builder()
 			.bucket(bucket)
@@ -130,7 +141,7 @@ public class UserService {
 	}
 
 	public void deleteOnS3(String email, String photo) {
-		String key = "crello/user" + email + "/" + photo;
+		String key = "crello/user/" + email + "/" + photo;
 
 		DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
 			.bucket(bucket)

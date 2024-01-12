@@ -5,6 +5,7 @@ import java.util.List;
 import com.v1.crello.board.Board;
 import com.v1.crello.card.Card;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,6 +36,6 @@ public class BoardList {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
 	private Board board;
-	@OneToMany(mappedBy = "boardList")
+	@OneToMany(mappedBy = "boardList", cascade = CascadeType.REMOVE)
 	List<Card> cards;
 }

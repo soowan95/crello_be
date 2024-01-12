@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.v1.crello.board.Board;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,7 +38,7 @@ public class User {
 	private String photo;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Board> boards;
 
 	public User hashPassword(PasswordEncoder passwordEncoder) {
