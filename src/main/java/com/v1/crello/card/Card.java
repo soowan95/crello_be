@@ -30,6 +30,8 @@ public class Card {
 	private String title;
 	@Column(name = "content", length = 2000)
 	private String content;
+	@Column(name = "idx")
+	private Integer index;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "list_id")
 	BoardList boardList;

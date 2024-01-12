@@ -30,10 +30,13 @@ public class CardService {
 		BoardList list = boardListRepository.findById(request.getListId())
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_LIST_ID));
 
+		List<Card> cards = cardRepository.findByBoardList_Id(request.getListId());
+
 		cardRepository.save(Card.builder()
 			.boardList(list)
 			.content(request.getContent())
 			.title(request.getTitle())
+			.index(cards.size())
 			.build());
 
 		return boardListService.findByBoardId(request.getBoardId());
@@ -57,15 +60,83 @@ public class CardService {
 		Card card = cardRepository.findById(request.getCardId())
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_CARD_ID));
 
-		BoardList list = boardListRepository.findById(request.getNextListId())
+		BoardList nextList = boardListRepository.findById(request.getNextListId())
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_LIST_ID));
 
-		cardRepository.save(Card.builder()
-			.id(card.getId())
-			.boardList(list)
-			.content(card.getContent())
-			.title(card.getTitle())
-			.build());
+		BoardList prevList = boardListRepository.findById(request.getPrevListId())
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_LIST_ID));
+
+		List<Card> nextCards = cardRepository.findByBoardList_IdOrderByIndex(request.getNextListId());
+
+		List<Card> prevCards = cardRepository.findByBoardList_IdOrderByIndex(request.getPrevListId());
+
+		if (request.getNextListId().equals(request.getPrevListId())) {
+			if (card.getIndex() < request.getNextIndex()) {
+				for (int i = card.getIndex() + 1; i <= request.getNextIndex(); i++) {
+					Card c = nextCards.get(i);
+					cardRepository.save(Card.builder()
+						.id(c.getId())
+						.index(c.getIndex() - 1)
+						.boardList(nextList)
+						.content(c.getContent())
+						.title(c.getTitle())
+						.build());
+				}
+				cardRepository.save(Card.builder()
+					.id(card.getId())
+					.boardList(nextList)
+					.content(card.getContent())
+					.title(card.getTitle())
+					.index(request.getNextIndex())
+					.build());
+			} else {
+				for (int i = request.getNextIndex(); i < card.getIndex(); i++) {
+					Card c = nextCards.get(i);
+					cardRepository.save(Card.builder()
+						.id(c.getId())
+						.index(c.getIndex() + 1)
+						.boardList(nextList)
+						.content(c.getContent())
+						.title(c.getTitle())
+						.build());
+				}
+				cardRepository.save(Card.builder()
+					.id(card.getId())
+					.boardList(nextList)
+					.content(card.getContent())
+					.title(card.getTitle())
+					.index(request.getNextIndex())
+					.build());
+			}
+		} else {
+			for (int i = request.getNextIndex(); i < nextCards.size(); i++) {
+				Card c = nextCards.get(i);
+				cardRepository.save(Card.builder()
+					.id(c.getId())
+					.index(c.getIndex() + 1)
+					.boardList(nextList)
+					.content(c.getContent())
+					.title(c.getTitle())
+					.build());
+			}
+			for (int i = card.getIndex() + 1; i < prevCards.size(); i++) {
+				Card c = prevCards.get(i);
+				cardRepository.save(Card.builder()
+					.id(c.getId())
+					.index(c.getIndex() - 1)
+					.boardList(prevList)
+					.content(c.getContent())
+					.title(c.getTitle())
+					.build());
+			}
+			cardRepository.save(Card.builder()
+				.id(card.getId())
+				.boardList(nextList)
+				.content(card.getContent())
+				.title(card.getTitle())
+				.index(request.getNextIndex())
+				.build());
+		}
 
 		return boardListService.findByBoardId(request.getBoardId());
 	}
