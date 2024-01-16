@@ -62,8 +62,9 @@ public class AuthService {
 		String photoUrl;
 		if (user.getPhoto() == null)
 			photoUrl = null;
-		else
+		else if (!user.getPhoto().startsWith("http"))
 			photoUrl = urlPrefix + "crello/user/" + user.getEmail() + "/" + user.getPhoto();
+		else photoUrl = user.getPhoto();
 
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())
@@ -104,6 +105,23 @@ public class AuthService {
 				.build();
 		} else
 			throw new CustomException(CustomEnum.INVALID_EMAIL);
+	}
+
+	public LoginResponse oauthLogin(String email) {
+		User user = this.findUserByEmail(email);
+
+		UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+
+		TokenInfo jwt = tokenProvider.oauthToken(userDetails);
+
+		return LoginResponse.builder()
+			.accessToken(jwt.getAccessToken())
+			.refreshToken(jwt.getRefreshToken())
+			.nickname(user.getNickname())
+			.email(user.getEmail())
+			.photo(user.getPhoto())
+			.userRole(user.getUserRole())
+			.build();
 	}
 
 	public User findUserByEmail(String email) {

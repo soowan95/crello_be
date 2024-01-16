@@ -112,6 +112,35 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 	}
 
+	public TokenInfo oauthToken(UserDetails userDetails) {
+
+		System.out.println("oauthToken");
+
+		long now = (new Date()).getTime();
+		Date accessValidity = new Date(now + this.accessTokenValidityInMilliseconds);
+		Date refreshValidity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+		String accessToken = Jwts.builder()
+			.setSubject(userDetails.getUsername())
+			.claim(AUTHORITIES_KEY, userDetails.getAuthorities())
+			.signWith(key, SignatureAlgorithm.HS512)
+			.setExpiration(accessValidity)
+			.compact();
+
+		String refreshToken = Jwts.builder()
+			.setSubject(userDetails.getUsername())
+			.claim(AUTHORITIES_KEY, userDetails.getAuthorities())
+			.signWith(key, SignatureAlgorithm.HS512)
+			.setExpiration(refreshValidity)
+			.compact();
+
+		return TokenInfo.builder()
+			.grantType("Bearer")
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
+	}
+
 	// 토큰에 담겨있는 정보를 이용해 Authentication 객체 리턴
 	public Authentication getAuthentication(String token) {
 

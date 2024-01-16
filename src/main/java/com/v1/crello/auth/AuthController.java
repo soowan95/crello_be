@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.v1.crello.dto.request.jwt.OauthRequest;
 import com.v1.crello.dto.request.jwt.RtkRequest;
 import com.v1.crello.dto.request.user.LoginRequest;
 import com.v1.crello.dto.request.user.LogoutRequest;
@@ -25,6 +26,13 @@ public class AuthController {
 	public ResponseEntity<LoginResponse> getLoginToken(@RequestBody LoginRequest loginRequest) {
 
 		return ResponseEntity.ok(authService.getLoginToken(loginRequest.getEmail(), loginRequest.getPassword()));
+	}
+
+	@PostMapping("/oauthLogin")
+	@Operation(summary = "Oauth Login", description = "소셜 로그인 시 JWT 발급")
+	public ResponseEntity<LoginResponse> getAccessToken(@RequestBody OauthRequest request) {
+
+		return ResponseEntity.ok(authService.oauthLogin(request.getEmail()));
 	}
 
 	@PostMapping("/logout")

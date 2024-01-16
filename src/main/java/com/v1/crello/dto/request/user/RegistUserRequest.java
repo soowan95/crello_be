@@ -12,4 +12,6 @@ public class RegistUserRequest {
 	private String password;
 	@Schema(description = "이메일")
 	private String email;
+	@Schema(description = "사진 url")
+	private String photo;
 }
