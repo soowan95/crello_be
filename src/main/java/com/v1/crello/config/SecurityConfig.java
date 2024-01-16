@@ -38,6 +38,7 @@ public class SecurityConfig {
 		"/api/v1/user/changepw",
 		"/",
 		"/login",
+		"/oauthLogin",
 		"/logout",
 		"/signup"
 	};

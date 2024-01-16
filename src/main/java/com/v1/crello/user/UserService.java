@@ -52,6 +52,7 @@ public class UserService {
 			.nickname(request.getNickname() == null ? request.getEmail().split("@")[0] : request.getNickname())
 			.password(request.getPassword())
 			.email(request.getEmail())
+			.photo(request.getPhoto())
 			.userRole(UserRole.USER)
 			.build();
 
@@ -139,8 +140,12 @@ public class UserService {
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 
-		if (user.checkPassword(password, bCryptPasswordEncoder))
+		if (user.checkPassword(password, bCryptPasswordEncoder)) {
+
+			if (user.getPhoto() != null && !user.getPhoto().startsWith("http")) deleteOnS3(email, user.getPhoto());
+
 			userRepository.delete(user);
+		}
 		else
 			throw new CustomException(CustomEnum.FORBIDDEN);
 	}

@@ -51,6 +51,7 @@ public class CardService {
 			.boardList(card.getBoardList())
 			.content(request.getContent())
 			.title(request.getTitle())
+			.index(card.getIndex())
 			.build());
 
 		return boardListService.findByBoardId(request.getBoardId());
