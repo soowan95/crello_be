@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum UserRole {
-	PREMIUM("Premium"),
-	COMMON("Common"),
-	TRIAl("Trial");
+	PREMIUM("PREMIUM"),
+	COMMON("COMMON"),
+	TRIAl("TRIAL");
 
 	private final String label;
 
