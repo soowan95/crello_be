@@ -34,7 +34,7 @@ public class CrelloApplication {
 	public CommandLineRunner commandLineRunner() {
 		User user = User.builder()
 			.email("a")
-			.userRole(UserRole.USER)
+			.userRole(UserRole.TRIAl)
 			.nickname("a")
 			.password("a")
 			.build();

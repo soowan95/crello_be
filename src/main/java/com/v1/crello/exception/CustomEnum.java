@@ -9,7 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CustomEnum {
 	NON_AUTHENTICATE(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
-	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "이메일이 존재하지 않습니다."),
 	FORBIDDEN(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다."),
 	DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 사용중인 이메일입니다."),
 	INVALID_EMAIL(HttpStatus.BAD_REQUEST, "유효하지 않은 이메일입니다."),

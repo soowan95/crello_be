@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.v1.crello.dto.request.user.ChangePasswordRequest;
 import com.v1.crello.dto.request.user.RegistUserRequest;
+import com.v1.crello.dto.request.user.RoleUpdateRequest;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
 
@@ -62,6 +63,14 @@ public class UserController {
 	@Operation(summary = "Change Password", description = "비밀번호 변경")
 	public ResponseEntity<Void> changepw(@RequestBody ChangePasswordRequest request) {
 		userService.changepw(request);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("roleUpdate")
+	@Operation(summary = "Role Update", description = "유저 등급 변경")
+	public ResponseEntity<Void> roleUpdate(@RequestBody RoleUpdateRequest request) {
+		userService.roleUpdate(request);
 
 		return ResponseEntity.ok().build();
 	}

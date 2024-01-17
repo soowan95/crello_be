@@ -72,7 +72,7 @@ public class AuthService {
 			.nickname(user.getNickname())
 			.email(user.getEmail())
 			.photo(photoUrl)
-			.userRole(user.getUserRole())
+			.role(user.getUserRole().getLabel())
 			.build();
 	}
 
@@ -120,12 +120,12 @@ public class AuthService {
 			.nickname(user.getNickname())
 			.email(user.getEmail())
 			.photo(user.getPhoto())
-			.userRole(user.getUserRole())
+			.role(user.getUserRole().getLabel())
 			.build();
 	}
 
 	public User findUserByEmail(String email) {
 		return userRepository.findByEmail(email)
-			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 	}
 }

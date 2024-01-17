@@ -20,6 +20,6 @@ public class LoginResponse {
 	private String accessToken;
 	@Schema(description = "JWT Refresh Token")
 	private String refreshToken;
-	@Schema(description = "권한")
-	private UserRole userRole;
+	@Schema(description = "유저 등급")
+	private String role;
 }
