@@ -36,6 +36,7 @@ public class SecurityConfig {
 		"/api/v1/user/regist",
 		"/api/v1/user/check",
 		"/api/v1/user/changepw",
+		"/api/v1/iamport/verify/**",
 		"/",
 		"/login",
 		"/oauthLogin",
@@ -79,8 +80,6 @@ public class SecurityConfig {
 			.sessionManagement((sessionConfig) -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
 				.requestMatchers(PERMIT_URL_ARRAY).permitAll()
-				.requestMatchers("/api/v1/user/admin/**").hasRole(UserRole.ADMIN.name())
-				.requestMatchers("/api/v1/user/manger/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.MANAGER.name())
 				.anyRequest().authenticated());
 
 		return http.build();

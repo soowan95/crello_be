@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum UserRole {
-	ADMIN("관리자"),
-	MANAGER("매니저"),
-	USER("일반사용자");
+	PREMIUM("Premium"),
+	COMMON("Common"),
+	TRIAl("Trial");
 
-	private String label;
+	private final String label;
 
 	UserRole(String label) {
 		this.label = label;

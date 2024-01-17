@@ -14,6 +14,7 @@ import com.v1.crello.board.BoardRepository;
 import com.v1.crello.boardList.BoardListService;
 import com.v1.crello.dto.request.user.ChangePasswordRequest;
 import com.v1.crello.dto.request.user.RegistUserRequest;
+import com.v1.crello.dto.request.user.RoleUpdateRequest;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
 import com.v1.crello.exception.CustomEnum;
@@ -53,7 +54,7 @@ public class UserService {
 			.password(request.getPassword())
 			.email(request.getEmail())
 			.photo(request.getPhoto())
-			.userRole(UserRole.USER)
+			.userRole(request.getRole() == null ? UserRole.TRIAl : request.getRole())
 			.build();
 
 		user.hashPassword(bCryptPasswordEncoder);
@@ -83,7 +84,7 @@ public class UserService {
 
 	public UpdateUserResponse update(UpdateUserRequest request, MultipartFile photo) {
 		User user = userRepository.findByEmail(request.getEmail())
-			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 
 		if (user.getPhoto() != null && photo != null)
 			deleteOnS3(user.getEmail(), user.getPhoto());
@@ -118,9 +119,10 @@ public class UserService {
 
 	public void changepw(ChangePasswordRequest request) {
 		User user = userRepository.findByEmail(request.getEmail())
-			.orElseThrow(() -> new CustomException(CustomEnum.UNAUTHORIZED));
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 
-		if (user.checkPassword(request.getPassword(), bCryptPasswordEncoder)) throw new CustomException(CustomEnum.SAME_PASSWORD);
+		if (user.checkPassword(request.getPassword(), bCryptPasswordEncoder))
+			throw new CustomException(CustomEnum.SAME_PASSWORD);
 
 		User updateUser = User.builder()
 			.email(user.getEmail())
@@ -142,12 +144,27 @@ public class UserService {
 
 		if (user.checkPassword(password, bCryptPasswordEncoder)) {
 
-			if (user.getPhoto() != null && !user.getPhoto().startsWith("http")) deleteOnS3(email, user.getPhoto());
+			if (user.getPhoto() != null && !user.getPhoto().startsWith("http"))
+				deleteOnS3(email, user.getPhoto());
 
 			userRepository.delete(user);
-		}
-		else
+		} else
 			throw new CustomException(CustomEnum.FORBIDDEN);
+	}
+
+	public void roleUpdate(RoleUpdateRequest request) {
+		User user = userRepository.findByEmail(request.getEmail())
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
+
+		userRepository.save(User.builder()
+			.photo(user.getPhoto())
+			.nickname(user.getNickname())
+			.userRole(request.getRole())
+			.password(user.getPassword())
+			.refreshToken(user.getRefreshToken())
+			.boards(user.getBoards())
+			.email(user.getEmail())
+			.build());
 	}
 
 	public void uploadOnS3(String email, MultipartFile file) {

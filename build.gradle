@@ -48,6 +48,15 @@ dependencies {
 
     // s3
     implementation 'software.amazon.awssdk:s3:2.21.26'
+
+    // iamport
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
+
+    allprojects {
+        repositories {
+            maven { url 'https://jitpack.io' }
+        }
+    }
 }
 
 tasks.named('bootBuildImage') {
@@ -63,7 +72,7 @@ def generated = project.layout.buildDirectory.dir("generated/querydsl").get().as
 
 // java source set 에 Querydsl QClass 위치 설정
 sourceSets {
-    main.java.srcDirs += [ generated ]
+    main.java.srcDirs += [generated]
 }
 
 // Querydsl이 생성한 QClass 디렉토리 설정
