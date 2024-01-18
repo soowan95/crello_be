@@ -118,12 +118,20 @@ public class AuthService {
 
 		TokenInfo jwt = tokenProvider.oauthToken(userDetails);
 
+		String photoUrl;
+		if (user.getPhoto() == null)
+			photoUrl = null;
+		else if (!user.getPhoto().startsWith("http"))
+			photoUrl = urlPrefix + "crello/user/" + user.getEmail() + "/" + user.getPhoto();
+		else
+			photoUrl = user.getPhoto();
+
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())
 			.refreshToken(jwt.getRefreshToken())
 			.nickname(user.getNickname())
 			.email(user.getEmail())
-			.photo(user.getPhoto())
+			.photo(photoUrl)
 			.role(user.getUserRole().getLabel())
 			.code(user.getCode())
 			.build();
