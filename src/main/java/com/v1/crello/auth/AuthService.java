@@ -56,6 +56,7 @@ public class AuthService {
 			.userRole(user.getUserRole())
 			.nickname(user.getNickname())
 			.photo(user.getPhoto())
+			.code(user.getCode())
 			.refreshToken(jwt.getRefreshToken())
 			.build());
 
@@ -64,7 +65,8 @@ public class AuthService {
 			photoUrl = null;
 		else if (!user.getPhoto().startsWith("http"))
 			photoUrl = urlPrefix + "crello/user/" + user.getEmail() + "/" + user.getPhoto();
-		else photoUrl = user.getPhoto();
+		else
+			photoUrl = user.getPhoto();
 
 		return LoginResponse.builder()
 			.accessToken(jwt.getAccessToken())
@@ -73,6 +75,7 @@ public class AuthService {
 			.email(user.getEmail())
 			.photo(photoUrl)
 			.role(user.getUserRole().getLabel())
+			.code(user.getCode())
 			.build();
 	}
 
@@ -87,6 +90,7 @@ public class AuthService {
 			.userRole(user.getUserRole())
 			.nickname(user.getNickname())
 			.photo(user.getPhoto())
+			.code(user.getCode())
 			.build());
 	}
 
@@ -121,6 +125,7 @@ public class AuthService {
 			.email(user.getEmail())
 			.photo(user.getPhoto())
 			.role(user.getUserRole().getLabel())
+			.code(user.getCode())
 			.build();
 	}
 

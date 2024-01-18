@@ -1,8 +1,12 @@
 package com.v1.crello.user;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.v1.crello.util.AppUtil;
 import com.v1.crello.dto.request.user.ChangePasswordRequest;
 import com.v1.crello.dto.request.user.RegistUserRequest;
 import com.v1.crello.dto.request.user.RoleUpdateRequest;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
+import com.v1.crello.dto.response.user.AllUserResponse;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+	private final AppUtil appUtil;
 
 	@PostMapping("regist")
 	@Operation(summary = "Regist User", description = "유저 정보를 등록함.")
@@ -43,11 +50,20 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
+	@GetMapping("checkCode/{code}")
+	@Operation(summary = "Check User Code", description = "코드가 유효한지 확인")
+	public ResponseEntity<Void> checkUserCode(@PathVariable String code) {
+		userService.checkUserCode(code);
+		return ResponseEntity.ok().build();
+	}
+
 	@PutMapping("update")
 	@Operation(summary = "Update User", description = "유저 정보 업데이트")
 	public ResponseEntity<UpdateUserResponse> update(UpdateUserRequest request,
 		@RequestParam(value = "photo", required = false) MultipartFile photo) {
-		return ResponseEntity.ok(userService.update(request, photo));
+		UpdateUserResponse update = userService.update(request, photo);
+		appUtil.setAllUserNickname();
+		return ResponseEntity.ok(update);
 	}
 
 	@DeleteMapping("delete")
@@ -73,5 +89,14 @@ public class UserController {
 		userService.roleUpdate(request);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("searchAll/{target}")
+	@Operation(summary = "Search All User", description = "검색 시 자동완성 시스템")
+	public ResponseEntity<List<String>> searchAll(@PathVariable("target") String target) {
+		List<String> list = AllUserResponse.getAll().stream().filter(a -> a.contains(target)).sorted(
+			Comparator.comparingInt(a -> a.compareTo(target))).limit(10).toList();
+
+		return ResponseEntity.ok(list);
 	}
 }
