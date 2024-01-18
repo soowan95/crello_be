@@ -11,6 +11,7 @@ import com.v1.crello.boardList.BoardListRepository;
 import com.v1.crello.boardList.BoardListService;
 import com.v1.crello.dto.request.board.CreateBoardRequest;
 import com.v1.crello.dto.request.board.UpdateBoardRequest;
+import com.v1.crello.dto.request.board.UpdatePublicRequest;
 import com.v1.crello.dto.request.board.UpdateRecentBoardRequest;
 import com.v1.crello.dto.response.board.AllBoardResponse;
 import com.v1.crello.dto.response.board.RecentBoardResponse;
@@ -29,7 +30,6 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final UserRepository userRepository;
 	private final BoardListService boardListService;
-	private final BoardListRepository boardListRepository;
 
 	public void create(CreateBoardRequest request) {
 
@@ -41,6 +41,7 @@ public class BoardService {
 			.title(request.getTitle())
 			.updated(LocalDateTime.now())
 			.color(request.getColor())
+			.isPublic(request.getIsPublic())
 			.build();
 
 		boardRepository.save(board);
@@ -60,6 +61,7 @@ public class BoardService {
 				.id(board.getId())
 				.title(board.getTitle())
 				.color(board.getColor())
+				.isPublic(board.getIsPublic())
 				.build());
 		}
 
@@ -70,7 +72,8 @@ public class BoardService {
 
 		Board board = boardRepository.findByUserEmailLimitOne(email);
 
-		if (board == null) return null;
+		if (board == null)
+			return null;
 
 		return RecentBoardResponse.builder()
 			.id(board.getId())
@@ -102,11 +105,26 @@ public class BoardService {
 			.title(request.getTitle())
 			.user(board.getUser())
 			.color(board.getColor())
+			.isPublic(board.getIsPublic())
 			.build());
 	}
 
 	public void deleteBoard(Integer id) {
 
 		boardRepository.deleteById(id);
+	}
+
+	public void updateBoardPublic(UpdatePublicRequest request) {
+		Board board = boardRepository.findById(request.getId())
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_BOARD_ID));
+
+		boardRepository.save(Board.builder()
+			.id(board.getId())
+			.isPublic(request.getIsPublic())
+			.color(board.getColor())
+			.title(board.getTitle())
+			.user(board.getUser())
+			.updated(board.getUpdated())
+			.build());
 	}
 }

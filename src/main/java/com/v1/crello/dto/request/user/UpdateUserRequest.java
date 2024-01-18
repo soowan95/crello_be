@@ -12,4 +12,5 @@ public class UpdateUserRequest {
 	private String email;
 	private String password;
 	private String nickname;
+	private Boolean toBaseImg;
 }

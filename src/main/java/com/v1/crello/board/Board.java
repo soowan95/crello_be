@@ -38,6 +38,8 @@ public class Board {
 	private LocalDateTime updated;
 	@Column(name = "color")
 	private String color;
+	@Column(name = "isPublic")
+	private Boolean isPublic;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_email")
 	private User user;
