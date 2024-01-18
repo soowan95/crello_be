@@ -79,6 +79,7 @@ public class UserService {
 			.title(user.getNickname() + "'s First Board")
 			.updated(LocalDateTime.now())
 			.color("#1d285d")
+			.isPublic(true)
 			.build();
 
 		boardRepository.save(board);
@@ -104,6 +105,9 @@ public class UserService {
 			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
 
 		if (user.getPhoto() != null && photo != null)
+			deleteOnS3(user.getEmail(), user.getPhoto());
+
+		if (user.getPhoto() != null && request.getToBaseImg())
 			deleteOnS3(user.getEmail(), user.getPhoto());
 
 		User updateUser = User.builder()

@@ -13,4 +13,6 @@ public class CreateBoardRequest {
 	private String email;
 	@Schema(description = "보드 배경색")
 	private String color;
+	@Schema(description = "공개 여부")
+	private Boolean isPublic;
 }

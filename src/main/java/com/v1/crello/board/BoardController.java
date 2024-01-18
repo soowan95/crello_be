@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.v1.crello.dto.request.board.CreateBoardRequest;
 import com.v1.crello.dto.request.board.UpdateBoardRequest;
+import com.v1.crello.dto.request.board.UpdatePublicRequest;
 import com.v1.crello.dto.request.board.UpdateRecentBoardRequest;
 import com.v1.crello.dto.response.board.AllBoardResponse;
 import com.v1.crello.dto.response.board.RecentBoardResponse;
@@ -61,6 +62,13 @@ public class BoardController {
 	@Operation(summary = "Update Title", description = "해당 보드의 제목 변경")
 	public ResponseEntity<Void> updateTitle(@RequestBody UpdateBoardRequest request) {
 		boardService.updateBoardTitle(request);
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/updatePublic")
+	@Operation(summary = "Update Public", description = "해당 보드의 공개 여부 변경")
+	public ResponseEntity<Void> updatePublic(@RequestBody UpdatePublicRequest request) {
+		boardService.updateBoardPublic(request);
 		return ResponseEntity.ok().build();
 	}
 
