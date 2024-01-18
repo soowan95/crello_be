@@ -16,6 +16,7 @@ import com.v1.crello.dto.request.user.ChangePasswordRequest;
 import com.v1.crello.dto.request.user.RegistUserRequest;
 import com.v1.crello.dto.request.user.RoleUpdateRequest;
 import com.v1.crello.dto.request.user.UpdateUserRequest;
+import com.v1.crello.dto.response.user.AllUserResponse;
 import com.v1.crello.dto.response.user.UpdateUserResponse;
 import com.v1.crello.exception.CustomEnum;
 import com.v1.crello.exception.CustomException;
@@ -49,17 +50,29 @@ public class UserService {
 		if (!request.getEmail().matches(".*\\..*"))
 			throw new CustomException(CustomEnum.INVALID_EMAIL);
 
+		String code = this.makecode();
+
+		while (true) {
+			if (userRepository.findByCode(code).isPresent())
+				code = this.makecode();
+			else
+				break;
+		}
+
 		User user = User.builder()
 			.nickname(request.getNickname() == null ? request.getEmail().split("@")[0] : request.getNickname())
 			.password(request.getPassword())
 			.email(request.getEmail())
 			.photo(request.getPhoto())
 			.userRole(request.getRole() == null ? UserRole.TRIAl : request.getRole())
+			.code(code)
 			.build();
 
 		user.hashPassword(bCryptPasswordEncoder);
 
 		userRepository.save(user);
+
+		AllUserResponse.getAll().add(user.getNickname() + "#" + user.getCode());
 
 		Board board = Board.builder()
 			.user(user)
@@ -76,6 +89,10 @@ public class UserService {
 	public void checkUserEmail(String email) {
 		if (this.isEmailExist(email))
 			throw new CustomException(CustomEnum.DUPLICATE_EMAIL);
+	}
+
+	public void checkUserCode(String code) {
+		userRepository.findByCode(code).orElseThrow(() -> new CustomException(CustomEnum.INVALID_CODE));
 	}
 
 	private boolean isEmailExist(String email) {
@@ -97,6 +114,7 @@ public class UserService {
 			.password(request.getPassword() == null ? user.getPassword() : request.getPassword())
 			.nickname(request.getNickname() == null ? user.getNickname() : request.getNickname())
 			.photo(photo == null ? user.getPhoto() : photo.getOriginalFilename())
+			.code(user.getCode())
 			.build();
 
 		if (request.getPassword() != null)
@@ -131,6 +149,7 @@ public class UserService {
 			.password(request.getPassword())
 			.nickname(user.getNickname())
 			.photo(user.getPhoto())
+			.code(user.getCode())
 			.build();
 
 		updateUser.hashPassword(bCryptPasswordEncoder);
@@ -164,6 +183,7 @@ public class UserService {
 			.refreshToken(user.getRefreshToken())
 			.boards(user.getBoards())
 			.email(user.getEmail())
+			.code(user.getCode())
 			.build());
 	}
 
@@ -192,5 +212,24 @@ public class UserService {
 			.build();
 
 		s3.deleteObject(objectRequest);
+	}
+
+	public String makecode() {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < 6; i++) {
+
+			double random = Math.random();
+
+			if (random < 0.5) {
+				int ranNum = (int)(Math.random() * 10);
+				sb.append(ranNum);
+			} else {
+				int ranAlpha = (int)(Math.random() * 26) + 65;
+				sb.append((char)ranAlpha);
+			}
+		}
+
+		return sb.toString();
 	}
 }

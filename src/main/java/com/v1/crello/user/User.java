@@ -1,6 +1,7 @@
 package com.v1.crello.user;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -36,6 +37,8 @@ public class User {
 	private String refreshToken;
 	@Column(name = "photo")
 	private String photo;
+	@Column(name = "code")
+	private String code;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

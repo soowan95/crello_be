@@ -22,4 +22,6 @@ public class LoginResponse {
 	private String refreshToken;
 	@Schema(description = "유저 등급")
 	private String role;
+	@Schema(description = "닉네임 코드")
+	private String code;
 }

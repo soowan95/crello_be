@@ -48,9 +48,9 @@ public class BoardService {
 		boardListService.initialCreate(board);
 	}
 
-	public List<AllBoardResponse> findAllByUserEmail(String email) {
-		User user = userRepository.findByEmail(email)
-			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_EMAIL));
+	public List<AllBoardResponse> findAllByUserCode(String code) {
+		User user = userRepository.findByCode(code)
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_CODE));
 
 		List<Board> boards = boardRepository.findAllByUser(user);
 		List<AllBoardResponse> responses = new ArrayList<>();

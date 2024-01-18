@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +38,10 @@ public class BoardController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all/{code}")
 	@Operation(summary = "Find all board", description = "특정 유저의 모든 보드를 탐색함.")
-	public ResponseEntity<List<AllBoardResponse>> findAll(@RequestParam String email) {
-		return ResponseEntity.ok(boardService.findAllByUserEmail(email));
+	public ResponseEntity<List<AllBoardResponse>> findAll(@PathVariable("code") String code) {
+		return ResponseEntity.ok(boardService.findAllByUserCode(code));
 	}
 
 	@GetMapping("/recent")

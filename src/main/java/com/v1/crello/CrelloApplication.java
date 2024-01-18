@@ -1,19 +1,11 @@
 package com.v1.crello;
 
-import java.time.LocalDateTime;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.v1.crello.board.BoardRepository;
-import com.v1.crello.boardList.BoardListService;
-import com.v1.crello.board.Board;
-import com.v1.crello.user.User;
-import com.v1.crello.user.UserRepository;
-import com.v1.crello.user.UserRole;
+import com.v1.crello.util.AppUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CrelloApplication {
 
-	private final UserRepository userRepository;
-	private final BoardRepository boardRepository;
-	private final BoardListService boardListService;
-	private final PasswordEncoder bCryptPasswordEncoder;
+	private final AppUtil appUtil;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CrelloApplication.class, args);
@@ -32,28 +21,9 @@ public class CrelloApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner() {
-		User user = User.builder()
-			.email("a")
-			.userRole(UserRole.TRIAl)
-			.nickname("a")
-			.password("a")
-			.build();
 
-		user.hashPassword(bCryptPasswordEncoder);
+		appUtil.setAllUserNickname();
 
-		userRepository.save(user);
-
-		Board board = Board.builder()
-			.user(user)
-			.title(user.getNickname() + "'s First Board")
-			.updated(LocalDateTime.now())
-			.color("#1d285d")
-			.build();
-
-		boardRepository.save(board);
-
-		boardListService.initialCreate(board);
-
-		return args -> System.out.println("테스트용 아이디 생성");
+		return args -> System.out.println("유저 등록 완료");
 	}
 }
