@@ -23,7 +23,14 @@ jobs:
         run: ./gradlew test
 
       - name: Make Zip File
-        run: zip -qq -r ./$GITHUB_SHA.zip
+        run: |
+          JAR_FILE=$(find ./build/libs -name '*.jar' -print -quit)
+          if [ -n "$JAR_FILE" ]; then
+            zip -qq -j ./$GITHUB_SHA.zip "$JAR_FILE"
+          else
+            echo "Error: JAR file not found in build/libs."
+            exit 1
+          fi
         shell: bash
 
       - name: Configure AWS credentials
