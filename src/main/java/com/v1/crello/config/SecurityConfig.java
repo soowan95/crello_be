@@ -60,7 +60,7 @@ public class SecurityConfig {
 			config.setAllowedHeaders(Collections.singletonList("*"));
 			config.setAllowedMethods(Collections.singletonList("*"));
 
-			config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+			config.setAllowedOriginPatterns(Collections.singletonList("http://43.200.39.112"));
 			config.setAllowCredentials(true);
 
 			return config;
