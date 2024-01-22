@@ -38,10 +38,9 @@ public class SecurityConfig {
 		"/api/v1/user/changepw",
 		"/api/v1/iamport/verify/**",
 		"/",
-		"/login",
-		"/oauthLogin",
-		"/logout",
-		"/signup"
+		"/api/v1/auth/login",
+		"/api/v1/auth/oauthLogin",
+		"/api/v1/auth/logout",
 	};
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -60,7 +59,7 @@ public class SecurityConfig {
 			config.setAllowedHeaders(Collections.singletonList("*"));
 			config.setAllowedMethods(Collections.singletonList("*"));
 
-			config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+			config.setAllowedOriginPatterns(Collections.singletonList("http://43.200.39.112"));
 			config.setAllowCredentials(true);
 
 			return config;

@@ -3,6 +3,7 @@ package com.v1.crello.auth;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.v1.crello.dto.request.jwt.OauthRequest;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -43,7 +45,7 @@ public class AuthController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/api/v1/auth/refresh")
+	@PostMapping("/refresh")
 	@Operation(summary = "refresh token", description = "atk 만료 시 rtk으로 atk 재발급")
 	public ResponseEntity<RtkResponse> refreshAccessToken(@RequestBody RtkRequest request) {
 
