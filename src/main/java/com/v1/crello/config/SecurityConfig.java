@@ -38,10 +38,9 @@ public class SecurityConfig {
 		"/api/v1/user/changepw",
 		"/api/v1/iamport/verify/**",
 		"/",
-		"/login",
-		"/oauthLogin",
-		"/logout",
-		"/signup"
+		"/api/v1/auth/login",
+		"/api/v1/auth/oauthLogin",
+		"/api/v1/auth/logout",
 	};
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
