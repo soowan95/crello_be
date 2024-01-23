@@ -126,4 +126,11 @@ public class CardService {
 			.index(request.getNextIndex())
 			.build());
 	}
+
+	public void delete(Integer cardId) {
+		Card card = cardRepository.findById(cardId)
+			.orElseThrow(() -> new CustomException(CustomEnum.INVALID_CARD_ID));
+
+		cardRepository.delete(card);
+	}
 }

@@ -3,6 +3,8 @@ package com.v1.crello.card;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,13 @@ public class CardController {
 	@Operation(summary = "Move Card", description = "카드 이동")
 	public ResponseEntity<Void> move(@RequestBody MoveCardRequest request) {
 		cardService.move(request);
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/delete/{cardId}")
+	@Operation(summary = "Delete Card", description = "카드 삭제")
+	public ResponseEntity<Void> delete(@PathVariable("cardId") Integer cardId) {
+		cardService.delete(cardId);
 		return ResponseEntity.ok().build();
 	}
 }
