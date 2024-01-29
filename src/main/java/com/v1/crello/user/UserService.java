@@ -72,7 +72,7 @@ public class UserService {
 
 		userRepository.save(user);
 
-		AllUserResponse.getAll().add(user.getNickname() + "#" + user.getCode());
+		AllUserResponse.getAll().add(user.getNickname() + " #" + user.getCode());
 
 		Board board = Board.builder()
 			.user(user)
@@ -173,6 +173,8 @@ public class UserService {
 			userRepository.delete(user);
 		} else
 			throw new CustomException(CustomEnum.FORBIDDEN);
+
+		AllUserResponse.getAll().remove(user.getNickname() + "  #" + user.getCode());
 	}
 
 	public void roleUpdate(RoleUpdateRequest request) {
